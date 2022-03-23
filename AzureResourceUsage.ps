@@ -1,0 +1,88 @@
+Set-StrictMode -version latest
+Connect-AzureRmAccount
+$location = "West US 2" #Location depends on where the azure datacenter is located
+$exampleVmQuota = Get-AzureRmVMUsage -Location $location | Select Name, CurrentValue, Limit
+$exampleVmQuota | ForEach-Object {
+
+    $obj = New-Object PSObject
+    $obj | Add-Member NoteProperty ResourceName $_.Name.LocalizedValue
+    $obj | Add-Member NoteProperty CurrentlyUsed $_.CurrentValue
+    $obj | Add-Member NoteProperty Limit $_.Limit
+    $obj | Add-Member NoteProperty Category "VM"
+
+    $exampleVmQuota += $obj
+}
+
+$exampleVmQuota | Export-Csv "c:\users\$env:username\desktop\example_QuotaUsage_VMs.csv" -Force -NoTypeInformation
+
+#----#
+
+$exampleVMsCount = Get-AzureRmVM | Select Name, @{N="IP Address";E={@($_.guest.IPAddress[0])}}
+$exampleVMsCount | Export-Csv "c:\users\$env:username\desktop\example_VMs_Count.csv" -Force -NoTypeInformation
+
+#----#
+$ServerData = @()
+$ServerList = Get-AzureRmVM -Status| where {$_.name -like "*avmced*"} #Azure virtual machines names, The example used here is avmced
+foreach ($Server in $ServerList) {
+    $VMSize = $Server.HardwareProfile.VmSize
+    $SKUData = get-azurermvmsize -location "West US 2" | where { $_.name -eq $VMSize }
+
+    $currServer = New-Object -TypeName psobject
+    $currServer | add-member -membertype Noteproperty -name ServerName -value $Server.name
+    $currServer | add-member -membertype Noteproperty -name ResourceGroupName -value $Server.ResourceGroupName
+    $currServer | add-member -membertype Noteproperty -name CoreCount -value $SKUData.NumberOfCores
+    $currServer | add-member -membertype Noteproperty -name MemoryInMB -value $SKUData.MemoryInMB
+
+    $ServerData += $currServer
+}
+$ServerData | Export-Csv "c:\users\$env:username\desktop\example_Data_VMs.csv" -Force -NoTypeInformation
+
+#-----#
+$GetexampleVMstatus = Get-AzureRmVM  -Status | Select-Object ResourceGroupName, Name, Location, @{ label = "VMStatus"; Expression = { $_.PowerState } }
+$GetexampleVMstatus | Export-Csv "c:\users\$env:username\desktop\example_Status_VMs.csv" -Force -NoTypeInformation
+#---#
+$exampleVMCreationDate = Get-AzureRmDisk | Select-Object Name,  ResourceGroupName, TimeCreated
+$exampleVMCreationDate | Export-Csv "c:\users\$env:username\desktop\example_CreationDate_VMs.csv" -Force -NoTypeInformation
+#---#
+$exampleVms = Get-AzureRmVMUsage -Location "West US 2" | select @{label = "Name"; expression = { $_.name.LocalizedValue } }, currentvalue, limit, @{label = "Used Percentage"; expression = { ($_.currentvalue / $_.Limit) * 100 } }, @{Label = "Remaining"; expression = { $_.Limit - $_.currentvalue } }, @{Label = "location"; Expression = { "westus" } }
+$examplenetworks = Get-AzureRmNetworkUsage -Location "West US 2" | select @{label = "Name"; expression = { $_.resourcetype } }, currentvalue, limit, @{label = "Used Percentage"; expression = { ($_.currentvalue / $_.Limit) * 100 } }, @{Label = "Remaining"; expression = { $_.Limit - $_.currentvalue } }, @{Label = "location"; Expression = { "westus" } }
+$exampleVmsNtks = $exampleVms + $examplenetworks
+$exampleVmsNtks | Export-CSV "c:\users\$env:username\desktop\example_Resource_VMs_Ntks.csv"
+
+$MailSender = "example@example.org"
+[string[]]$ToMultipleAddress = "examplesupport@example.org " #The email must to those interested in decreasing azure VMs cost.
+
+$Subject = "example Azure Resource Usage data"
+$body = "
+To exampleSuportTeam:
+Here are Attached Csv files on $subject"
+$AttachmentOne = "c:\users\$env:username\desktop\example_QuotaUsage_VMs.csv"
+$AttachmentTwo = "c:\users\$env:username\desktop\example_Data_VMs.csv"
+$AttachmentThree = "c:\users\$env:username\desktop\example_Status_VMs.csv"
+$AttachmentFour = "c:\users\$env:username\desktop\example_CreationDate_VMs.csv"
+$attachmentFive = "c:\users\$env:username\desktop\example_Resource_VMs_Ntks.csv"
+$attachmentSix = "c:\users\$env:username\desktop\example_VMs_Count.csv"
+
+$smtpserver = "smtp.example.org"  #Here we need active smtp active server
+$message = new-object System.Net.Mail.MailMessage
+$message.From = $MailSender
+$message.To.Add($ToMultipleAddress)
+$message.IsBodyHtml = $True
+$message.Subject = $Subject
+
+$attachone = new-object Net.Mail.Attachment($AttachmentOne)
+$message.Attachments.Add($AttachmentOne)
+$attachtwo = new-object Net.Mail.Attachment($AttachmentTwo)
+$message.Attachments.Add($AttachmentTwo)
+$attachthree = new-object Net.Mail.Attachment($AttachmentThree)
+$message.Attachments.Add($AttachmentThree)
+$attachfour = new-object Net.Mail.Attachment($attachmentFour)
+$message.Attachments.Add($attachmentFour)
+$attachfive = new-object Net.Mail.Attachment($AttachmentFive)
+$message.Attachments.Add($AttachmentFive)
+$attachSix = new-object Net.Mail.Attachment($attachmentSix)
+$message.Attachments.Add($attachmentSix)
+
+$message.body = $body
+$smtp = new-object Net.Mail.SmtpClient($smtpserver)
+$smtp.Send($message)
