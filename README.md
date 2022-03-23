@@ -2,8 +2,10 @@ This project is temporarly posted as sample work.
 
 # Azure-Pipelines-Error-Analysis---AZPEA
 
+Goal: Analyzing Build Pipeline release logs and sending the analytics result to a team of developers with the most common errors during build release. Please review the data flow diagram. 
+
 #Introduction  
-  *  Providing example of with 10 most common errors & Specific case errors in the release that have occured in the last 30 days. 
+  *  Providing example of 10 most common errors & Specific case errors in the release that have occured in the last 30 days. 
   *  Extracting example of Azure Resource Usage Data and  detailing Quota's, Percentage Usage, VMs creation Date and VMs Status. 
   
 #USED TOOLS 
