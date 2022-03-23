@@ -1,4 +1,4 @@
-This project is temporarly posted as sample work. 
+This project is temporarily posted as sample work. 
 
 # Azure-Pipelines-Error-Analysis---AZPEA
 
