@@ -26,6 +26,8 @@ To extract Azure Resource Usage data, follow these steps:
 
 Access PowerShell ISE on your development box.
 Copy the "AzureResourceUsage.ps1" file from the Azure Resource Usage PS scripts folder and paste it into the PowerShell ISE environment.
+Please replace the placeholder values (e.g., YourTenantId, YourClientId, YourClientSecret, YourSubscriptionId) with your actual Azure credentials and adjust the email configuration (e.g., SMTP server, sender, recipient) according to your setup.
+Remember to install the Az module (Install-Module -Name Az) and import it (Import-Module Az) before executing the script.
 After running the script, you can expect to find the following files on your desktop:
 1.example_QuotaUsage_VMs.csv
 2.example_Data_VMs.csv
