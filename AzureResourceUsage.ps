@@ -1,6 +1,6 @@
 Set-StrictMode -version latest
 Connect-AzureRmAccount
-$location = "West US 2" #Location depends on where the azure datacenter is located
+$location = "West US 2" 
 $exampleVmQuota = Get-AzureRmVMUsage -Location $location | Select Name, CurrentValue, Limit
 $exampleVmQuota | ForEach-Object {
 
