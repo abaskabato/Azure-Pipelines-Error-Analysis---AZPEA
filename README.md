@@ -1,36 +1,41 @@
-This project is temporarily posted as sample work. 
+Azure-Pipelines-Error-Analysis---AZPEA
+The primary objective of this project is to analyze the release logs of build pipelines and provide developers with insights into the most common errors encountered during the build-release process. Additionally, we aim to analyze the usage of Azure resources and report the curated data back to the developer team. Please refer to the data flow diagram for a better understanding of the process.
 
-# Azure-Pipelines-Error-Analysis---AZPEA
+Introduction
+In this section, we will provide examples of the ten most common errors and specific case errors that have occurred in the release process within the last 30 days. We will also extract Azure Resource Usage data, including details such as quotas, percentage usage, VM creation dates, and VM statuses.
 
-Goal: The first goal is analyzing build pipeline release logs and sending the analytics result to a team of developers with the most common errors during build release. The second goal is analyzing used Azure resource and reporting the curated data back to the developer team.  Please review the data flow diagram. 
+Tools Used
+To accomplish the goals mentioned above, we will utilize the following tools:
 
-#Introduction  
-  *  Providing example of 10 most common errors & Specific case errors in the release that have occured in the last 30 days. 
-  *  Extracting example of Azure Resource Usage Data and  detailing Quota's, Percentage Usage, VMs creation Date and VMs Status. 
-  
-#USED TOOLS 
-  *  ADX - Azure data explorer  
-  *  Powershell ISE 
+Azure Data Explorer (ADX)
+PowerShell Integrated Scripting Environment (ISE)
+Programming Languages Used
+We will work with the following programming languages:
 
-#USED PL
-  *  Powershell
-  *  Kusto Query Language - KQL 
+PowerShell
+Kusto Query Language (KQL)
+Content
+The project includes the following components:
 
-#CONTENT 
-1. Azure Pipeline Slack App 
-2. Azure Resource Usage PS Script
-3. Extract Release Most Common Errors KQL file  
+Azure Pipeline Slack App
+Azure Resource Usage PowerShell Script
+Extract Release Most Common Errors KQL file
+Script Usage: Azure Resource Usage
+To extract Azure Resource Usage data, follow these steps:
 
-                                              Script Usage
+Access PowerShell ISE on your development box.
+Copy the "AzureResourceUsage.ps1" file from the Azure Resource Usage PS scripts folder and paste it into the PowerShell ISE environment.
+After running the script, you can expect to find the following files on your desktop:
+1.example_QuotaUsage_VMs.csv
+2.example_Data_VMs.csv
+3.example_Status_VMs.csv
+4.example_CreationDate_VMs.csv
+5.example_Resource_VMs_Ntks.csv
+An email will be sent to exampleSupportTeam@examplehost.com, attaching the five CSV files.
+Script Usage: Release Error Analytics
+To analyze release errors, please follow these steps:
 
-# Azure Resource Usage.
-1. Access The "Powershell ISE" through your Development Box 
-2. Copy  "AzureResourceUsage.ps1" from Azure Resource Usage PS scripts  folder and Paste it into the environment of Powershell ISE. 
-3. After Running your Script, Expect to have 1.example_QuotaUsage_VMs.csv , 2. example_Data_VMs.csv , 3.example_Status_VMs.csv 4.example_CreationDate_VMs.csv 4.example_Resource_VMs_Ntks.csv on your desktop.
-5. Email is sent to exampleSuportTeam@examplehost.com attaching the five Csv files.   
-
-# Release Error analytics.
-1. Access the ADX (Azure Data Explorer) through https://dataexplorer.azure.com 
-2. Copy "ExtractReleaseMostCommonErrors.kql"  from Extract Release Most Common Errors folder and  paste it into Azure Data Explorer Kusto(KQL) running environment
-3. Read the comments above each KQL blocks and run them accordingly. To run each block of KQL code, You can either press the play icon or click shift + Enter while being on the code
-4. Any Data Outcome can be downloaded into excel by clicking up on the top "File" Icon. 
+Access Azure Data Explorer (ADX) through https://dataexplorer.azure.com.
+Copy the "ExtractReleaseMostCommonErrors.kql" file from the Extract Release Most Common Errors folder and paste it into the Azure Data Explorer Kusto (KQL) running environment.
+Read the comments above each KQL block and run them accordingly. To execute each block of KQL code, you can either click the play icon or press Shift + Enter while the code is selected.
+You can download any data outcome into Excel by clicking on the "File" icon at the top of the page.
