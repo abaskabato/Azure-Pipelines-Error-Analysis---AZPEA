@@ -1,4 +1,4 @@
-// Relos Most Common Release Errors Over Past 30days
+// Most Common Release Errors Over Past 30 Days
 // The filtering technique used in these specific queries is more inclined to cancel the noise of meaningless ( only readable in technical level) logEntries.
 
 Logs
@@ -13,8 +13,8 @@ Logs
 | project exampleMostCommonReleaseErrorsOverPast30days = substring( LogEntry, 0),  Frequency = substring(count_,0)
 | limit 10
 
-// Considering the fact that those canceled noise from data might have an impact, 
-//The following query clearly shows most commonly failing tasks ( Tasks that include the canceled Logs on the previous queries) 
+// Considering the fact that those canceled noises from data might have an impact, 
+//The following query clearly shows the most commonly failing tasks ( Tasks that include the canceled Logs on the previous queries) 
  // exampleMostFailingTasks/30 days
 Logs 
 | where LogEntry contains "##[error]"
@@ -24,9 +24,9 @@ Logs
 | order by count_ desc 
 | project exampleMostFailingTasks = substring(TaskName,  0), Frequency = substring(count_,0)
 
-// Combining both of the Failing task (tasks that includes Unreadable LogEntry data) and example most common Release errors ( filtered data ).  
+// Combining both of the Failing tasks (tasks that include Unreadable LogEntry data) and examples of most common Release errors ( filtered data ).  
 // This query is Genecic which implies the outcome of the data is Unfiltered OR not easily readable. 
-// Having this data will help some of code base problems and it is technically traceable
+// Having this data will help some of the code base problems and it is technically traceable
 Logs
 | where LogEntry contains "##[error]" 
 | where LogEntryDateTime >= ago(30d) 
@@ -36,9 +36,9 @@ Logs
 | project exampleMostCommonUNFILTEREDReleaseErrorsOverPast30days = substring( LogEntry, 0),  Frequency = substring(count_,0), TaskName
 | limit 30
 
-// The following queries are Customizable which can apply to any specif specific case Errors. 
+// The following queries are Customizable and can apply to any specif specific case of Errors. 
 // Most Common Keyword = " Input From a User"  For instance: DNS Server is, Quota, IEjobName 
-// Replace your keyword inside "Most common Keyword " and see if what you thought was a common failing over past 30 days
+// Replace your keyword inside "Most common Keyword " and see if what you thought was a common failing over the past 30 days
 
 Logs
 | where LogEntry contains "Most Common Keyword"
