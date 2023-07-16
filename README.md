@@ -7,16 +7,19 @@ The primary objective of this project is to analyze the release logs of build pi
 In this section, we will provide examples of the ten most common errors and specific case errors that have occurred in the release process within the last 30 days. We will also extract Azure Resource Usage data, including details such as quotas, percentage usage, VM creation dates, and VM statuses.
 
 **Tools Used**
+
 To accomplish the goals mentioned above, we will utilize the following tools:
 - Azure Data Explorer (ADX)
 - PowerShell Integrated Scripting Environment (ISE)
 
 **Programming Languages Used**
+
 We will work with the following programming languages:
 - PowerShell
 - Kusto Query Language (KQL)
 
 **Content**
+
 The project includes the following components:
 - Azure Resource Usage PowerShell Script
 - Extract Release Most Common Errors KQL file
